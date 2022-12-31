@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>JayTee SF</title>
+
+    <link href="/clue/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  </head>
+
+  <body id="page-top">
+    <p class="notice"></p>
+    <p class="alert"></p>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <!-- no query-params -->
+          <div id="numPlayersScreen" style="display:none">
+            <p>How many players?</p>
+            <a class="bootstrap-btn primary" href="javascript:newGameWith(number_of_players=3)">3 player game</a><br /><br>
+            <a class="bootstrap-btn primary" href="javascript:newGameWith(number_of_players=4)">4 player game</a><br /><br>
+            <a class="bootstrap-btn primary" href="javascript:newGameWith(number_of_players=5)">5 player game</a><br /><br>
+            <a class="bootstrap-btn primary" href="javascript:newGameWith(number_of_players=6)">6 player game</a>
+          </div> <!-- numPlayersScreen -->
+
+          <!-- number_of_players query-param -->
+          <div id="setupScreen" style="display:none">
+            <form id="setupForm">
+              <input type="hidden" name="authenticity_token" id="authenticity_token" value="DlgxsyuD2FGrvvYwpYk0cDRvhy2uJXRUrFC6LgmXunZDGDTlu4LSwxqHe9BJACYofrtH7+18H/jcMcdBN+qNHg==" autocomplete="off" />
+              <div class="form-group">
+                <label for="ordered_names">What are the names of all the players (in order --including your own name)?</label><br>
+                <input class="form-control" type="text" placeholder="playerName #1" name="ordered_names[0]" id="ordered_names_0"> <br>
+                <input class="form-control" type="text" placeholder="playerName #2" name="ordered_names[1]" id="ordered_names_1"> <br>
+                <input class="form-control" type="text" placeholder="playerName #3" name="ordered_names[2]" id="ordered_names_2"> <br>
+                <input class="form-control" type="text" placeholder="playerName #4" name="ordered_names[3]" id="ordered_names_3"> <br>
+                <br /> <br />
+
+                <label for="your_name">Which of them (listed above) is your name?</label><br>
+                <input class="form-control" type="text" placeholder="your Name" id="your_name" name="your_name"><br><br>
+              </div>
+
+              <div class="form-group">
+                <label>Which 6 cards are showing on the board?</label><br>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_0" name="board_cards[0]" value="green"> <label for="board_cards_0"> green</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_1" name="board_cards[1]" value="mustard"> <label for="board_cards_1"> mustard</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_2" name="board_cards[2]" value="peacock"> <label for="board_cards_2"> peacock</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_3" name="board_cards[3]" value="plum"> <label for="board_cards_3"> plum</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_4" name="board_cards[4]" value="scarlet"> <label for="board_cards_4"> scarlet</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_5" name="board_cards[5]" value="white"> <label for="board_cards_5"> white</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_6" name="board_cards[6]" value="candlestick"> <label for="board_cards_6"> candlestick</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_7" name="board_cards[7]" value="dagger"> <label for="board_cards_7"> dagger</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_8" name="board_cards[8]" value="pistol"> <label for="board_cards_8"> pistol</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_9" name="board_cards[9]" value="lead_pipe"> <label for="board_cards_9"> lead_pipe</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_10" name="board_cards[10]" value="rope"> <label for="board_cards_10"> rope</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_11" name="board_cards[11]" value="wrench"> <label for="board_cards_11"> wrench</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_12" name="board_cards[12]" value="bathroom"> <label for="board_cards_12"> bathroom</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_13" name="board_cards[13]" value="bedroom"> <label for="board_cards_13"> bedroom</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_14" name="board_cards[14]" value="courtyard"> <label for="board_cards_14"> courtyard</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_15" name="board_cards[15]" value="dining_room"> <label for="board_cards_15"> dining_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_16" name="board_cards[16]" value="game_room"> <label for="board_cards_16"> game_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_17" name="board_cards[17]" value="garage"> <label for="board_cards_17"> garage</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_18" name="board_cards[18]" value="kitchen"> <label for="board_cards_18"> kitchen</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_19" name="board_cards[19]" value="living_room"> <label for="board_cards_19"> living_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="board_cards_20" name="board_cards[20]" value="office"> <label for="board_cards_20"> office</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label>Which 3 cards do you have?</label><br>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_0" name="your_cards[0]" value="green"> <label for="your_cards_0"> green</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_1" name="your_cards[1]" value="mustard"> <label for="your_cards_1"> mustard</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_2" name="your_cards[2]" value="peacock"> <label for="your_cards_2"> peacock</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_3" name="your_cards[3]" value="plum"> <label for="your_cards_3"> plum</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_4" name="your_cards[4]" value="scarlet"> <label for="your_cards_4"> scarlet</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_5" name="your_cards[5]" value="white"> <label for="your_cards_5"> white</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_6" name="your_cards[6]" value="candlestick"> <label for="your_cards_6"> candlestick</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_7" name="your_cards[7]" value="dagger"> <label for="your_cards_7"> dagger</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_8" name="your_cards[8]" value="pistol"> <label for="your_cards_8"> pistol</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_9" name="your_cards[9]" value="lead_pipe"> <label for="your_cards_9"> lead_pipe</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_10" name="your_cards[10]" value="rope"> <label for="your_cards_10"> rope</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_11" name="your_cards[11]" value="wrench"> <label for="your_cards_11"> wrench</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_12" name="your_cards[12]" value="bathroom"> <label for="your_cards_12"> bathroom</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_13" name="your_cards[13]" value="bedroom"> <label for="your_cards_13"> bedroom</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_14" name="your_cards[14]" value="courtyard"> <label for="your_cards_14"> courtyard</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_15" name="your_cards[15]" value="dining_room"> <label for="your_cards_15"> dining_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_16" name="your_cards[16]" value="game_room"> <label for="your_cards_16"> game_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_17" name="your_cards[17]" value="garage"> <label for="your_cards_17"> garage</label><br><br>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_18" name="your_cards[18]" value="kitchen"> <label for="your_cards_18"> kitchen</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_19" name="your_cards[19]" value="living_room"> <label for="your_cards_19"> living_room</label>
+                    </div> &nbsp; &nbsp; &nbsp;
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="your_cards_20" name="your_cards[20]" value="office"> <label for="your_cards_20"> office</label><br><br>
+                    </div>
+                  </div>
+                </div>
+
+              </div> <br /><br />
+              <button type="submit" onclick="processSetupForm()" class="btn btn-primary">Submit</button>
+            </form>
+          </div> <!-- setupScreen -->
+
+          <!-- turn_number query-param -->
+          <div id="turnScreen" style="display:none">
+            <p>Take a turn...</p>
+
+            <form id="turnForm">
+              <input type="hidden" name="authenticity_token" id="authenticity_token" value="9xKiz+bpzYzb/bKXzs1VZQY7eC9ftJH7A1VClNeLfH5H76IwY17shi9zGu0Hn3o3fjHzZJTAkcBZVeeqwnPuJw==" autocomplete="off" />
+              <input type="hidden" name="clue_game_id" id="clue_game_id" value="5" autocomplete="off" />
+              <div class="form-group">
+                <label for="who">Who did Ayo mention?</label><br>
+                <select class="custom-select" id="who" name="who">
+                  <option selected>nobody</option>
+                  <option>green</option>
+                  <option>mustard</option>
+                  <option>peacock</option>
+                  <option>plum</option>
+                  <option>scarlet</option>
+                  <option>white</option>
+                </select><br /><br />
+
+                <label for="what">What did Ayo mention?</label><br>
+                <select class="custom-select" id="what" name="what">
+                  <option selected>nothing</option>
+                  <option>candlestick</option>
+                  <option>dagger</option>
+                  <option>pistol</option>
+                  <option>lead_pipe</option>
+                  <option>rope</option>
+                  <option>wrench</option>
+                </select><br /><br />
+
+                <label for="where">Where did Ayo mention?</label><br>
+                <select class="custom-select" id="where" name="where">
+                  <option selected>nowhere</option>
+                  <option>bathroom</option>
+                  <option>bedroom</option>
+                  <option>courtyard</option>
+                  <option>dining_room</option>
+                  <option>game_room</option>
+                  <option>garage</option>
+                  <option>kitchen</option>
+                  <option>living_room</option>
+                  <option>office</option>
+                </select><br /><br />
+              </div>
+
+              <div class="form-group">
+                <label for="who_answered">Who showed a card?</label><br>
+                <select class="custom-select" id="who_answered" name="who_answered">
+                  <option selected>nobody</option>
+                  <option>Ayo</option>
+                  <option>Mai</option>
+                  <option>JJ</option>
+                  <option>Bab</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="card_shown">Which card (assuming you saw) did they show?</label><br>
+                <select class="custom-select" id="card_shown" name="card_shown">
+                  <option selected>nothing</option>
+                  <option>mustard</option>
+                  <option>peacock</option>
+                  <option>scarlet</option>
+                  <option>white</option>
+                  <option>dagger</option>
+                  <option>pistol</option>
+                  <option>lead_pipe</option>
+                  <option>rope</option>
+                  <option>wrench</option>
+                  <option>bathroom</option>
+                  <option>dining_room</option>
+                  <option>game_room</option>
+                  <option>kitchen</option>
+                  <option>living_room</option>
+                  <option>office</option>
+                </select>
+              </div>
+
+              <button type="submit" onclick="processTurnForm()" class="btn btn-primary">Submit</button>
+            </form>
+          </div> <!-- turnScreen -->
+        </div>
+      </div>
+    </div>
+    <script src="/clue/clue.js"></script>
+    <script src="/clue/script.js"></script>
+    <script src="/clue/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+</html>
