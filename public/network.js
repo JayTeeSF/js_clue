@@ -72,19 +72,61 @@ class Level{
     }
   }
 
-  static dSigmoid(x) {
-    return 1 / (1 + Math.exp(-x));
+  static tanh(x) {
+    if (x === Infinity) {
+      return 1;
+    } else if (x === -Infinity) {
+      return -1;
+    } else {
+      let e2x = Math.exp(2 * x);
+      return (e2x - 1) / (e2x + 1);
+    }
   }
 
-  static dact(value) {
-    return Level.dSigmoid(value);
+  static dTanh(x) {
+    let output = Level.tanh(x);
+    return 1 - output * output;
+  }
+
+  static dSigmoid(x) {
+    let output = Level.sigmoid(x);
+    return output * (1 - output);
   }
 
   static sigmoid(x) {
     return 1 / (1 + Math.exp(-x));
   }
 
+  static relu(x) {
+    return x => Math.max(0, x);
+  }
+
+  static dRelu(x) {
+    return x <= 0 ? 0 : 1;
+  }
+
+  static linear(x) {
+     return x;
+  }
+
+  static dLinear(x) {
+    return 1;
+  }
+
+  static dact(value) {
+    return Level.dSigmoid(value);
+  }
+
   static act(value) {
+    return Level.sigmoid(value);
+  }
+
+  // In theory we can use a different activation fn for the final output layer...
+  static dOutputAct(value) {
+    return Level.dSigmoid(value);
+  }
+
+  static outputAct(value) {
     return Level.sigmoid(value);
   }
 
@@ -99,10 +141,17 @@ class Level{
         sum += level.inputs[j] * level.weights[j][i];
       }
 
+      // consider using a different activation function for the output layer...
+
       //if (sum > level.biases[i]){
         //level.outputs[i] = 1;
         //level.outputs[i] = 0;
-      level.outputs[i] = Level.act(sum + level.biases[i]);
+      let isFinalOutputLayer = i === level.outputs.length - 1;
+      if (isFinalOutputLayer) {
+        level.outputs[i] = Level.outputAct(sum + level.biases[i]);
+      } else {
+        level.outputs[i] = Level.act(sum + level.biases[i]);
+      }
     }
     return level.outputs;
   }
