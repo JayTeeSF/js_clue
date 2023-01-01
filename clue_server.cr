@@ -35,7 +35,9 @@ def ext_and_mime_type_for(path)
   return [ext, mime_type_for(ext)]
 end
 
-Mime = "text/html"
+HTMLMime = "text/html"
+CSSMime = "text/css"
+JSMime = "text/javascript"
 ip   = ARGV[0]? ? ARGV[0] : "0.0.0.0"
 port = ((ARGV[1]? ? ARGV[1] : "9292").to_i)
 
@@ -48,15 +50,45 @@ server = HTTP::Server.new([HTTP::CompressHandler.new, HTTP::ErrorHandler.new]) d
   st = Time.utc
   req = context.request
   res = context.response
-  res.content_type = Mime
   if req.method == "GET"
-    File.each_line("./public/index.html") do |line|
-      res.output << line
+    file = nil
+    case req.resource
+    when "/clue", "/"
+      file = "index.html"
+      res.content_type = HTMLMime
+    when "/clue/bootstrap.min.css"
+      file = "bootstrap.min.css"
+      res.content_type = CSSMime
+    when "/clue/script.css"
+      file = "script.css"
+      res.content_type = CSSMime
+    when "/clue/jquery-3.6.3.slim.min.js"
+      file = "jquery-3.6.3.slim.min.js"
+      res.content_type = JSMime
+    when "/clue/script.js"
+      file = "script.js"
+      res.content_type = JSMime
+    when "/clue/clue.js"
+      file = "clue.js"
+      res.content_type = JSMime
+    when "/clue/bootstrap.bundle.min.js"
+      file = "bootstrap.bundle.min.js"
+      res.content_type = JSMime
+    when "/clue/favicon.ico", "/favicon.ico"
+      file = nil
+    else
+      file = nil
     end
-    res.flush
+    
+    if file
+      file_path = "./public/#{file}"
+      content = File.read(file_path)
+      res.output << content
+      res.flush
+    end
   end
   et = Time.utc
-  puts("#{st} INFO - query_server: #{ip} - #{req.method} #{req.resource} #{req.version} - #{res.status_code} (#{elapsed_text(et - st)})")
+  puts(%Q|#{file.inspect} #{st} INFO - query_server: #{ip} - #{req.method} #{req.resource} #{req.version} - #{res.status_code} (#{elapsed_text(et - st)})|)
 
   next
 end

@@ -6,7 +6,7 @@
 
     <title>JayTee SF</title>
 
-    <link href="/clue/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link href="/clue/bootstrap.min.css" rel="stylesheet">
   </head>
 
   <body id="page-top">
@@ -27,7 +27,6 @@
           <!-- number_of_players query-param -->
           <div id="setupScreen" style="display:none">
             <form id="setupForm">
-              <input type="hidden" name="authenticity_token" id="authenticity_token" value="DlgxsyuD2FGrvvYwpYk0cDRvhy2uJXRUrFC6LgmXunZDGDTlu4LSwxqHe9BJACYofrtH7+18H/jcMcdBN+qNHg==" autocomplete="off" />
               <div class="form-group">
                 <label for="ordered_names">What are the names of all the players (in order --including your own name)?</label><br>
                 <input class="form-control" type="text" placeholder="playerName #1" name="ordered_names[0]" id="ordered_names_0"> <br>
@@ -300,7 +299,6 @@
             <p>Take a turn...</p>
 
             <form id="turnForm">
-              <input type="hidden" name="authenticity_token" id="authenticity_token" value="9xKiz+bpzYzb/bKXzs1VZQY7eC9ftJH7A1VClNeLfH5H76IwY17shi9zGu0Hn3o3fjHzZJTAkcBZVeeqwnPuJw==" autocomplete="off" />
               <input type="hidden" name="clue_game_id" id="clue_game_id" value="5" autocomplete="off" />
               <div class="form-group">
                 <label for="who">Who did Ayo mention?</label><br>
@@ -381,6 +379,7 @@
     </div>
     <script src="/clue/clue.js"></script>
     <script src="/clue/script.js"></script>
-    <script src="/clue/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="/clue/jquery-3.6.3.slim.min.js"></script>
+    <script src="/clue/bootstrap.bundle.min.js"></script>
   </body>
 </html>

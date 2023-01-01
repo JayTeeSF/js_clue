@@ -1,12 +1,14 @@
 var turnCount, numPlayers;
-let numPlayersScreen = getElementById('numPlayersScreen');
-let setupScreen = getElementById('setupScreen');
-let turnScreen = getElementById('turnScreen');
+let numPlayersScreen = document.getElementById('numPlayersScreen');
+let setupScreen = document.getElementById('setupScreen');
+let turnScreen = document.getElementById('turnScreen');
 
 function main() {
   if (numPlayers) { 
+    console.log("hiding numPlayers...");
     numPlayersScreen.style.display = "none";
   } else {
+    console.log("showing numPlayers...");
     numPlayersScreen.style.display = "block";
   }
 }
@@ -14,23 +16,28 @@ function main() {
 // tbd
 function newGameWith(number_of_players) {
   numPlayers = number_of_players
+  console.log("starting game w/ #{numPlayers}...")
+  numPlayersScreen.style.display = "none";
   setupScreen.style.display = "block";
-  turnScreen.style.display = "block";
+  turnScreen.style.display = "none";
   turnCount = 0;
 }
 
-let setupForm = getElementById('setupForm');
+let setupForm = document.getElementById('setupForm');
 function processSetupForm(event) {
+  event.preventDefault();
+  numPlayersScreen.style.display = "none";
   setupScreen.style.display = "none";
   turnScreen.style.display = "block";
-  event.preventDefault();
+  return false;
 }
 
-let turnForm = getElementById('turnForm');
+let turnForm = document.getElementById('turnForm');
 function processTurnForm(event) {
   event.preventDefault();
   turnScreen.style.display = "block";
   turnCount += 1;
+  return false;
 }
 
 main();

@@ -1,5 +1,4 @@
 const Clue = {
-  require("set");
   Card: class {
     get type() {
       return this._type
@@ -21,7 +20,7 @@ const Clue = {
     get toSym() {
       return toString().toSym
     }
-  };
+  },
 
   Player: class {
     get name() {
@@ -136,7 +135,7 @@ const Clue = {
     get toSym() {
       return toString().toSym
     }
-  };
+  },
 
   // Logic:
   // mark what you SEE (cuz the board shows it, you have it, or someone shows you)
@@ -242,7 +241,7 @@ const Clue = {
       this._outputFile = null;
       this._inputFile = null;
       this._yourName = yourName;
-      if (strBlank(yourName)) this.help("missing your_name");
+      if (IsStrBlank(yourName)) this.help("missing your_name");
       this._numberOfPlayers = orderedNames.size;
       this.validatePlayerCounts(this._numberOfPlayers);
       this.setupCards;
@@ -286,7 +285,7 @@ const Clue = {
     get solve() {
       this.removeBoardAndYourCardsFromOpponents;
 
-      while (takeAnotherTurn) {
+      while (isTakeAnotherTurn) {
 
       };
       return this.solution
@@ -296,11 +295,11 @@ const Clue = {
       return `It was ${this.who[0].name.capitalize} in the ${this.where[0]} with the ${this.what[0]}`
     };
 
-    certain?() {
+    certain() {
       return !this._uncertain
     };
 
-    takeAnotherTurn?(whoAsked=null, whatAsked=null, whereAsked=null, namesOfPlayersWhoDoNotHaveTheseCards=null, playerWhoShowedYouACard=null, cardPlayerShowedYou=null, nameOfPlayerWhoHasOneOfTheseCards=null) {
+    isTakeAnotherTurn(whoAsked=null, whatAsked=null, whereAsked=null, namesOfPlayersWhoDoNotHaveTheseCards=null, playerWhoShowedYouACard=null, cardPlayerShowedYou=null, nameOfPlayerWhoHasOneOfTheseCards=null) {
       // stop if done:
       if (certain) return false;
       if (this._turn == 0) console.warn("\nStarting the game...\n");
@@ -345,12 +344,12 @@ const Clue = {
       let whereCard = this.cardNamed(whereAsked);
 
       if (yourTheCurrentPlayer) {
-        if (strBlank(playerWhoShowedYouACard)) playerWhoShowedYouACard = null;
+        if (IsStrBlank(playerWhoShowedYouACard)) playerWhoShowedYouACard = null;
 
         if (playerWhoShowedYouACard) {
-          if (strBlank(cardPlayerShowedYou)) cardPlayerShowedYou = null
+          if (IsStrBlank(cardPlayerShowedYou)) cardPlayerShowedYou = null
         }
-      } else if (strBlank(nameOfPlayerWhoHasOneOfTheseCards)) {
+      } else if (IsStrBlank(nameOfPlayerWhoHasOneOfTheseCards)) {
         nameOfPlayerWhoHasOneOfTheseCards = null
       };
 
@@ -605,7 +604,7 @@ const Clue = {
       return res
     };
 
-    yourTheCurrentPlayer?() {
+    yourTheCurrentPlayer() {
       return this.currentPlayer.name == this._yourName
     };
 
@@ -698,19 +697,19 @@ Plus they have one or more of the following:
 `
     };
 
-    blank?(obj) {
+    isBlank(obj) {
       return strBlank(obj) || aryBlank(obj)
     };
 
-    strBlank?(str) {
+    isStrBlank(str) {
       return str == null || str == "" || str == " "
     };
 
-    aryPresent?(ary) {
+    isAryPresent(ary) {
       return !aryBlank(ary)
     };
 
-    aryBlank?(ary) {
+    isAryBlank(ary) {
       return [null, []].includes(ary)
     };
 
@@ -718,7 +717,7 @@ Plus they have one or more of the following:
       return console.warn(msg)
     };
 
-    notEnough?(limitedOptions=[{options: [], stopAt: 0, responses: []}]) {
+    IsNotEnough(limitedOptions=[{options: [], stopAt: 0, responses: []}]) {
       return limitedOptions.some(h => h.responses.size < h.stopAt)
     };
 
@@ -780,31 +779,31 @@ Plus they have one or more of the following:
       if (count < 3) this.help("must have at least 3 players");
       if (count > 6) return this.help("must have at most 6 players")
     }
-  };
+  },
 
-  const TXT_COL_SIZE = (11).freeze
+  TXT_COL_SIZE: 11,
 
-  const THE_BOARD = "the board".freeze;
+  THE_BOARD: "the board",
 
-  const WHO = [
+  WHO: [
     "green",
     "mustard",
     "peacock",
     "plum",
     "scarlet",
     "white"
-  ].freeze;
+  ],
 
-  const WHAT = [
+  WHAT: [
     "candlestick",
     "dagger",
     "pistol",
     "leadPipe",
     "rope",
     "wrench"
-  ].freeze;
+  ],
 
-  const WHERE = [
+  WHERE: [
     "bathroom",
     "bedroom",
     "courtyard",
@@ -814,14 +813,14 @@ Plus they have one or more of the following:
     "kitchen",
     "livingRoom",
     "office"
-  ].freeze;
+  ],
 
-  const CLASSIC_FACE_UP_CARDS_PER_PLAYER_CT = {
+  CLASSIC_FACE_UP_CARDS_PER_PLAYER_CT: {
     [3]: 0,
     [4]: 2,
     [5]: 3,
     [6]: 0
-  };
+  },
 
-  const FACE_UP_CARDS_PER_PLAYER_CT = {[3]: 6, [4]: 6, [5]: 3, [6]: 6}
+  FACE_UP_CARDS_PER_PLAYER_CT: {[3]: 6, [4]: 6, [5]: 3, [6]: 6}
 }
