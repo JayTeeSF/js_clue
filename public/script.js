@@ -24,8 +24,14 @@ function newGameWith(number_of_players) {
 }
 
 let setupForm = document.getElementById('setupForm');
+setupForm.addEventListener("click", function(event){
+  event.preventDefault()
+  alert("Did setupForm Handler prevent event: " + event.defaultPrevented);
+});
 function processSetupForm(event) {
   event.preventDefault();
+  alert("Was setupForm submt event's default prevented: " + event.defaultPrevented);
+
   numPlayersScreen.style.display = "none";
   setupScreen.style.display = "none";
   turnScreen.style.display = "block";
@@ -33,8 +39,13 @@ function processSetupForm(event) {
 }
 
 let turnForm = document.getElementById('turnForm');
+turnForm.addEventListener("click", function(event){
+  event.preventDefault()
+  alert("Did turnForm Handler prevent event: " + event.defaultPrevented);
+});
 function processTurnForm(event) {
   event.preventDefault();
+  alert("Was turnForm submt event's default prevented: " + event.defaultPrevented);
   turnScreen.style.display = "block";
   turnCount += 1;
   return false;

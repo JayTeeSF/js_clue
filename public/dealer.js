@@ -1,4 +1,10 @@
-// ok:
+if (typeof playerNames === "undefined") {
+  var playerNames = ["p1", "p2", "p3", "p4"]
+}
+if (typeof numPlayers === "undefined") {
+  var numPlayers = playerNames.length;
+}
+
 const NUM_SUSPECT_CARDS = 6;
 const NUM_WEAPON_CARDS = 6;
 const NUM_ROOM_CARDS = 9;
@@ -9,130 +15,182 @@ const SUSPECT_CARDS = [1, 2, 3, 4, 5, 6];
 const WEAPON_CARDS = [7, 8, 9, 10, 11, 12];
 const ROOM_CARDS = [13, 14, 15, 16, 17, 18, 19, 20, 21];
 
-if (typeof numPlayers === "undefined") {
-  var numPlayers = 4;
-}
-
-// Initialize the board cards and player hands
-let boardCards = [];
-let playerHands = [[], [], [], []]; // make this dynamic based on number of Players
-
-// Initialize the envelope
-let envelope = [];
-
-// Initialize the neural network
-let neuralNetwork = new NeuralNetwork(); // see call.js
-
-// Initialize the current player
-let currentPlayer = 0;
-
-// meh: see dealCards though...
-// Main game loop
-while (true) {
-  // Check if the current player has won
-  if (neuralNetwork.hasWon(playerHands[currentPlayer])) {
-    // Mutate the winning neural network and reset the game
-    neuralNetwork.mutate();
-    resetGame();
+class Game = {
+  constructor(brain=nil) {
+    this.setGame(brain);
   }
-  
-  // Get the current player's hand
-  let currentHand = playerHands[currentPlayer];
 
-  /*
-  // Determine the most strategic cards to ask about
-  let cardsToAsk = neuralNetwork.getCardsToAsk(currentHand, boardCards, envelope);
-  
-  // Determine the best card to show, if any
-  let cardToShow = neuralNetwork.getCardToShow(cardsToAsk, currentHand);
-  
-  // If the current player has a card to show, show it
-  if (cardToShow !== null) {
-    showCard(cardToShow, currentPlayer);
-    continue;
+  setGame(networkToMutate=null) {
+    // Initialize the board cards and player hands
+    this.boardCards = [];
+    this.players = [];
+    for (let idx = 0; i < numPlayers; i++) {
+      //make opponents
+      // networkToMutate.mutate();
+      players.append(new AiPlayer(idx, playerNames[idx]))
+    }
+
+    // Initialize the envelope
+    this.envelope = [];
+
+    // Initialize the current player
+    this.currentPlayerIdx = 0;
+    this.currentPlayer = players[this.currentPlayerIdx];
+
+    // Initialize the turn history
+    this.turnHistory = [];
+
+    // Deal the cards to the players and stuff the envelope
+    this.dealCards();
   }
-  
-  // Otherwise, ask about the cards
-  let response = askCards(cardsToAsk, currentPlayer);
-  
-  // If the current player received a response, update the board
-  if (response !== null) {
-    boardCards.push(response);
-    continue;
+
+  // Main game loop
+  mainGameLoop() {
+    while (true) { // can only use a game loop if we control the agent's request/response cycles
+      this.gameLoopIteration()
+    } // end Main game loop
   }
-  
-  // If the current player did not receive a response, it is the next player's turn
-  currentPlayer = (currentPlayer + 1) % numPlayers;
-  */
+
+  gameLoopIteration() {
+    // Check if the current player has won
+    if (currentPlayer.makeGuessifCertain && currentPlayer.guess === this.envelope) {
+      var networkToMutate = null;
+      if (currentPlayer.hasNeuralNetwork) {
+        // Mutate the winning neural network and reset the game
+        networkToMutate = currentPlayer.neuralNetwork
+        // .save...
+      }
+      setGame(networkToMutate);
+      continue; // go back to top of loop?!
+    }
 
     // Determine the most strategic cards to ask about or show
-  let cardsToAskOrShow = neuralNetwork.getCardsToAskOrShow(
-    currentHand,
-    boardCards,
-    envelope,
-    currentPlayer,
-    playerHands,
-    turnHistory
-  );
+    //if Show who, what, where
+    var cardsToAskOrShow = currentPlayer.getCardsToAskOrShow(
+      this.boardCards,
+      this.currentPlayerIdx, // something about all other players
+      this.numPlayers,
 
-  // If the current player is the neural network's player, ask about the cards
-  if (currentPlayer === neuralNetwork.playerIndex) {
-    let response = askCards(cardsToAskOrShow, currentPlayer);
+      this.turnHistory
+    );
 
-    // If the current player received a response, update the board and turn history
+    // If the current player is an AI player, ask about the cards
+    let response = currentPlayer.askCards(cardsToAskOrShow, currentPlayerIdx); //fixme: response is who, and possibly what...
+
+    // If the current player received a response, update turn history
     if (response !== null) {
-      boardCards.push(response);
-      turnHistory.push({
+      //  boardCards.push(response);
+      this.turnHistory.push({
         action: 'ask',
         cards: cardsToAskOrShow,
         response: response
       });
-      continue;
+      // trim turnHistory to only maintain the last n-entries...
+    }
+
+    // Otherwise, show the cards
+    showCards(cardsToAskOrShow, currentPlayerIdx);
+
+    // Update the turn history
+    this.turnHistory.push({
+      action: 'show',
+      cards: cardsToAskOrShow
+    });
+    // trim turnHistory to only maintain the last n-entries...
+    // }
+
+    // If the current player did not receive a response or show a card, it is the next player's turn
+    this.currentPlayerIdx = (this.currentPlayerIdx + 1) % numPlayers;
+  }
+
+  // Sets the game board, player hands, and turn history
+
+  dealCards() {
+    // Initialize an array of all the cards
+    let cards = [...SUSPECT_CARDS, ...WEAPON_CARDS, ...ROOM_CARDS];
+
+    // Shuffle the cards
+    this.shuffle(cards);
+
+    // Stuff the envelope with a suspect, weapon, and room card
+    this.envelope = [cards[0], cards[1], cards[2]];
+
+    // Deal 6 random cards to the board
+    this.boardCards = cards.slice(3, 9);
+
+    // Deal the remaining cards to the players
+    for (let i = 9; i < NUM_TOTAL_CARDS; i++) {
+      // playerHands[(i - 9) % numPlayers].push(cards[i]);
+      players[i].hand = 
+        cards.slice(
+          9 + i * (NUM_TOTAL_CARDS - 9) / players.length,
+          9 + (i + 1) * (NUM_TOTAL_CARDS - 9) / players.length
+        );
+    }
+  }
+}
+
+class Player = {
+  // should we just pass the game object ?!
+  constructor(gamePlayerIdx, name) {
+    this.gamePlayerIdx = gamePlayerIdx;
+    this.name = name;
+    this.hand = [];
+    this.guess = null;
+  }
+  makeGuess(suspect, weapon, room) {
+    this.guess = [suspect, weapon, room];
+  }
+  makeGuessIfCertain() { 
+    if (this.isCertain() && this.hasNeuralNetwork()) {
+      // this.getCardsToAsk(boardCards, numPlayers, turnHistory) {
+      // askNetwork && this.makeGuess()
+      return true;
+    } else {
+      return false;
     }
   }
 
-  // Otherwise, show the cards
-  showCards(cardsToAskOrShow, currentPlayer);
+  hasNeuralNetwork() {
+    return false;
+  }
 
-  // Update the turn history
-  turnHistory.push({
-    action: 'show',
-    cards: cardsToAskOrShow
-  });
-
-  // If the current player did not receive a response or show a card, it is the next player's turn
-  currentPlayer = (currentPlayer + 1) % 4;
-
-}
-
-// ok:
-// Resets the game board and player hands
-function resetGame() {
-  boardCards = [];
-  playerHands = [[], [], [], []];
-  envelope = [];
-  currentPlayer = 0;
-  
-  // Deal the cards to the players and stuff the envelope
-  dealCards();
-}
-
-function dealCards() {
-  // Initialize an array of all the cards
-  let cards = [...SUSPECT_CARDS, ...WEAPON_CARDS, ...ROOM_CARDS];
-  
-  // Shuffle the cards
-  shuffle(cards);
-  
-  // Stuff the envelope with a suspect, weapon, and room card
-  envelope = [cards[0], cards[1], cards[2]];
-  
-  // Deal 6 random cards to the board
-  boardCards = cards.slice(3, 9);
-  
-  // Deal the remaining cards to the players
-  for (let i = 9; i < NUM_TOTAL_CARDS; i++) {
-    playerHands[(i - 9) % numPlayers].push(cards[i]);
+  getCardsToAsk(boardCards, numPlayers, turnHistory) {
+    this.getCardsToAskOrShow(1, boardCards, numPlayers, turnHistory);
+  }
+  getCardsToShow: function(boardCards, numPlayers, turnHistory) {
+    this.getCardsToAskOrShow(0, boardCards, numPlayers, turnHistory);
+  }
+  // is it best to do both ...and then decide?!
+  getCardsToAskOrShow(mode, boardCards, numPlayers, turnHistory) {
+    //use: this.hand, this.gamePlayerIdx
+    return null;
   }
 }
 
+// Represents an AI player in the game
+class AiPlayer extends Player {
+  constructor(gamePlayerIdx, name, neuralNetwork) {
+    super(gamePlayerIdx, name);
+    this.neuralNetwork = neuralNetwork;
+  }
+
+  hasNeuralNetwork() {
+    if (this.neuralNetwork) { return true; } else { return false; }
+  }
+
+  getCardsToAskOrShow(mode, boardCards, numPlayers, turnHistory) {
+    if (this.neuralNetwork) {
+      return neuralNetwork.feedForward(
+        mode,
+        this.hand,
+        boardCards,
+        this.gamePlayerIdx
+        numPlayers,
+        turnHistory
+      )
+    } else {
+      return null;
+    }
+  }
+}

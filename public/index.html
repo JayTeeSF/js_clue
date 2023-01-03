@@ -26,7 +26,7 @@
 
           <!-- number_of_players query-param -->
           <div id="setupScreen" style="display:none">
-            <form id="setupForm">
+            <form id="setupForm" onsubmit="return false;">
               <div class="form-group">
                 <label for="ordered_names">What are the names of all the players (in order --including your own name)?</label><br>
                 <input class="form-control" type="text" placeholder="playerName #1" name="ordered_names[0]" id="ordered_names_0"> <br>
@@ -298,7 +298,7 @@
           <div id="turnScreen" style="display:none">
             <p>Take a turn...</p>
 
-            <form id="turnForm">
+            <form id="turnForm" onsubmit="return false;">
               <input type="hidden" name="clue_game_id" id="clue_game_id" value="5" autocomplete="off" />
               <div class="form-group">
                 <label for="who">Who did Ayo mention?</label><br>
