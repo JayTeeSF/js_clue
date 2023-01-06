@@ -20,14 +20,14 @@ class Game = {
     this.setGame(brain);
   }
 
-  setGame(networkToMutate=null) {
+  setGame(brain=null) {
     // Initialize the board cards and player hands
     this.boardCards = [];
     this.players = [];
-    for (let idx = 0; i < numPlayers; i++) {
+    for (let idx = 0; idx < numPlayers; idx++) {
       //make opponents
       // networkToMutate.mutate();
-      players.append(new AiPlayer(idx, playerNames[idx]))
+      players.append(new AiPlayer(playerNames[idx], this, idx))
     }
 
     // Initialize the envelope
@@ -45,7 +45,7 @@ class Game = {
   }
 
   // Main game loop
-  mainGameLoop() {
+  mainGameLoop() { // perhaps each player should trigger a gameLoopIteration...
     while (true) { // can only use a game loop if we control the agent's request/response cycles
       this.gameLoopIteration()
     } // end Main game loop
@@ -54,14 +54,14 @@ class Game = {
   gameLoopIteration() {
     // Check if the current player has won
     if (currentPlayer.makeGuessifCertain && currentPlayer.guess === this.envelope) {
-      var networkToMutate = null;
-      if (currentPlayer.hasNeuralNetwork) {
+      var brain = null;
+      if (currentPlayer.hasBrain) {
         // Mutate the winning neural network and reset the game
-        networkToMutate = currentPlayer.neuralNetwork
+        brain = currentPlayer.brain
         // .save...
       }
-      setGame(networkToMutate);
-      continue; // go back to top of loop?!
+      setGame(brain);
+      return;
     }
 
     // Determine the most strategic cards to ask about or show
@@ -132,7 +132,7 @@ class Game = {
 
 class Player = {
   // should we just pass the game object ?!
-  constructor(gamePlayerIdx, name) {
+  constructor(name, game, gamePlayerIdx) {
     this.gamePlayerIdx = gamePlayerIdx;
     this.name = name;
     this.hand = [];
@@ -142,7 +142,7 @@ class Player = {
     this.guess = [suspect, weapon, room];
   }
   makeGuessIfCertain() { 
-    if (this.isCertain() && this.hasNeuralNetwork()) {
+    if (this.isCertain() && this.hasBrain()) {
       // this.getCardsToAsk(boardCards, numPlayers, turnHistory) {
       // askNetwork && this.makeGuess()
       return true;
@@ -151,7 +151,7 @@ class Player = {
     }
   }
 
-  hasNeuralNetwork() {
+  hasBrain() {
     return false;
   }
 
@@ -170,25 +170,26 @@ class Player = {
 
 // Represents an AI player in the game
 class AiPlayer extends Player {
-  constructor(gamePlayerIdx, name, neuralNetwork) {
-    super(gamePlayerIdx, name);
-    this.neuralNetwork = neuralNetwork;
+  constructor(name, game, gamePlayerIdx, brain) {
+    super(name, game, gamePlayerIdx);
+    this.brain = brain;
   }
 
-  hasNeuralNetwork() {
-    if (this.neuralNetwork) { return true; } else { return false; }
+  hasBrain() {
+    if (this.brain) { return true; } else { return false; }
   }
 
   getCardsToAskOrShow(mode, boardCards, numPlayers, turnHistory) {
-    if (this.neuralNetwork) {
-      return neuralNetwork.feedForward(
+    if (this.brain) {
+      let inputs = [
         mode,
         this.hand,
         boardCards,
         this.gamePlayerIdx
         numPlayers,
         turnHistory
-      )
+      ]
+      return NeuralNetwork.feedForward(inputs, this.brain)
     } else {
       return null;
     }
